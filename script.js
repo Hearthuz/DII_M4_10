@@ -1,3 +1,13 @@
+var singleStudentResult = document.getElementById('single_student_result')
+var listStudentResult = document.getElementById('output')
+var addUserDetail = document.getElementById('addUserDetail')
+
+function hideAll(){
+    singleStudentResult.style.display='none'
+    listStudentResult.style.display='none'
+    addUserDetail.style.display='none'
+}
+
 function addStudentToTable(index,student){
     const tableBody = document.getElementById('tableBody')
     let row = document.createElement('tr')
@@ -43,6 +53,9 @@ function addStudentToTable(index,student){
     })
     cell.appendChild(button)
     row.appendChild(cell)
+    row.addEventListener('click', function() {
+        showStudentBlock(student)
+    })
     tableBody.appendChild(row)
 }
 function addStudentList(studentlist){
@@ -115,6 +128,8 @@ document.getElementById('addButton').addEventListener('click',function() {
     onAddStudentClick()
 })
 document.getElementById('searchButton').addEventListener('click',() =>{
+    hideAll()
+    singleStudentResult.style.display='block'
     let id = document.getElementById('inputText').value
     console.log(id)
     fetch(`https://dv-student-backend-2019.appspot.com/student/${id}`)
@@ -131,6 +146,11 @@ function showAllStudents(){
         .then(data =>{
             addStudentList(data)
         })
+}
+function showStudentBlock(student){
+    hideAll()
+    singleStudentResult.style.display='block'
+    addStudentData(student)
 }
 // function onLoad(){
 //     student = {
@@ -150,10 +170,20 @@ function showAllStudents(){
 // }
 function onLoad(){
     // deleteStudent(27)
-    fetch('https://dv-student-backend-2019.appspot.com/students').then(response => {
-        return response.json()
-    })
-        .then(data =>{
-            addStudentList(data)
-        })
+    // fetch('https://dv-student-backend-2019.appspot.com/students').then(response => {
+    //     return response.json()
+    // })
+    //     .then(data =>{
+    //         addStudentList(data)
+    //     })
+    hideAll()
 }
+document.getElementById('allStudentMenu').addEventListener('click',(event) => {
+    hideAll()
+    listStudentResult.style.display='block'
+    showAllStudents()
+})
+document.getElementById('addStudentMenu').addEventListener('click',(event) => {
+    hideAll()
+    addUserDetail.style.display='block'
+})
