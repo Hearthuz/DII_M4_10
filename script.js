@@ -1,11 +1,13 @@
 var singleStudentResult = document.getElementById('single_student_result')
 var listStudentResult = document.getElementById('output')
 var addUserDetail = document.getElementById('addUserDetail')
+var editUserDetail = document.getElementById('editUserDetail')
 
 function hideAll(){
     singleStudentResult.style.display='none'
     listStudentResult.style.display='none'
     addUserDetail.style.display='none'
+    editUserDetail.style.display='none'
 }
 
 function addStudentToTable(index,student){
@@ -22,6 +24,9 @@ function addStudentToTable(index,student){
     row.appendChild(cell)
     cell = document.createElement('td')
     cell.innerHTML = `${student.name} ${student.surname}`
+    cell.addEventListener('click', function() {
+        showStudentBlock(student)
+    })
     row.appendChild(cell)
     cell = document.createElement('td')
     cell.innerHTML = student.gpa
@@ -42,6 +47,21 @@ function addStudentToTable(index,student){
     cell = document.createElement('td')
     let button = document.createElement('button')
     button.classList.add('btn')
+    button.classList.add('btn-warning')
+    button.setAttribute('type', 'button')
+    button.innerText = 'edit'
+    button.addEventListener('click', function() {
+        let text = `Edit ${student.name}`;
+        if (confirm(text)) {
+            onEditStudent(student)
+
+        }
+    })
+    cell.appendChild(button)
+    row.appendChild(cell)
+    cell = document.createElement('td')
+    button = document.createElement('button')
+    button.classList.add('btn')
     button.classList.add('btn-danger')
     button.setAttribute('type', 'button')
     button.innerText = 'delete'
@@ -53,9 +73,6 @@ function addStudentToTable(index,student){
     })
     cell.appendChild(button)
     row.appendChild(cell)
-    row.addEventListener('click', function() {
-        showStudentBlock(student)
-    })
     tableBody.appendChild(row)
 }
 function addStudentList(studentlist){
@@ -94,6 +111,29 @@ function addStudentToDB(student){
         }
     }).then(data => {
         console.log('success',data)
+        alert(`student name ${data.name} is now added`)
+        showAllStudents()
+    }).catch(error => {
+        return null
+    })
+}
+function editStudentToDB(student){
+    fetch('http://dv-student-backend-2019.appspot.com/students', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(student)
+    }).then(respond => {
+        if (respond.status === 200) {
+            return respond.json()
+        }
+        else {
+            throw Error(respond.statusText)
+        }
+    }).then(data => {
+        console.log('success', data)
+        alert(`student name ${data.name} is now edit`)
         showAllStudents()
     }).catch(error => {
         return null
@@ -124,8 +164,31 @@ function onAddStudentClick(){
     student.image = document.getElementById('imageLinkInput').value
     addStudentToDB(student)
 }
+function onEditStudent(editStudent) {
+    hideAll()
+    editUserDetail.style.display = 'block'
+    document.getElementById('idTemp').value = editStudent.id
+    document.getElementById('editNameInput').value = editStudent.name
+    document.getElementById('editSurnameInput').value = editStudent.surname
+    document.getElementById('editStudentIdInput').value = editStudent.studentId
+    document.getElementById('editGpaInput').value = editStudent.gpa
+    document.getElementById('editImageLinkInput').value = editStudent.image
+}
+function onEditStudentClick(){
+    let student = {}
+    student.id = document.getElementById('idTemp').value
+    student.name = document.getElementById('editNameInput').value
+    student.surname = document.getElementById('editSurnameInput').value
+    student.studentId = document.getElementById('editStudentIdInput').value
+    student.gpa = document.getElementById('editGpaInput').value
+    student.image = document.getElementById('editImageLinkInput').value
+    editStudentToDB(student)
+}
 document.getElementById('addButton').addEventListener('click',function() {
     onAddStudentClick()
+})
+document.getElementById('editButton').addEventListener('click',function() {
+    onEditStudentClick()
 })
 document.getElementById('searchButton').addEventListener('click',() =>{
     hideAll()
@@ -144,6 +207,8 @@ function showAllStudents(){
         return response.json()
     })
         .then(data =>{
+            hideAll()
+            listStudentResult.style.display='block'
             addStudentList(data)
         })
 }
@@ -152,30 +217,7 @@ function showStudentBlock(student){
     singleStudentResult.style.display='block'
     addStudentData(student)
 }
-// function onLoad(){
-//     student = {
-//         studentId: "642110332",
-//         name: "Ariya",
-//         surname: "Watchara-apanukorn",
-//         gpa: "6.78",
-//         image: "https://i.pinimg.com/474x/fe/5b/8c/fe5b8c05c2a4d1e50e3d0cf9925e1556.jpg"
-//     }
-//     addStudentToDB(student)
-//     fetch('https://dv-student-backend-2019.appspot.com/students').then(response => {
-//         return response.json()
-//     })
-//         .then(data =>{
-//             addStudentList(data)
-//         })
-// }
 function onLoad(){
-    // deleteStudent(27)
-    // fetch('https://dv-student-backend-2019.appspot.com/students').then(response => {
-    //     return response.json()
-    // })
-    //     .then(data =>{
-    //         addStudentList(data)
-    //     })
     hideAll()
 }
 document.getElementById('allStudentMenu').addEventListener('click',(event) => {

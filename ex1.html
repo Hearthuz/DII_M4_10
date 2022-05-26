@@ -129,6 +129,7 @@
           <th scope="col">Image</th>
           <th scope="col">Pen Amount</th>
           <th scope="col">Description</th>
+          <th scope="col">แก้ไข</th>
           <th scope="col">ลบ</th>
         </tr>
       </thead>
@@ -158,6 +159,36 @@
       <div class="col">
         <img src="asset/images/default.jpg" alt="default image" id="image" />
       </div>
+    </div>
+  </div>
+  <div id="editUserDetail">
+    <div class="d-flex justify-content-center my-3">
+      <form class="row gy-2 gx-3 align-items-center">
+        <input type="hidden" id="idTemp">
+        <div class="form-floating">
+          <input type="text" class="form-control" id="editNameInput" placeholder="ชื่อ">
+          <label for="nameInput">Name</label>
+        </div>
+        <div class="form-floating">
+          <input type="text" class="form-control" id="editSurnameInput" placeholder="นามสกุล">
+          <label for="surnameInput">Surname</label>
+        </div>
+        <div class="form-floating">
+          <input type="text" class="form-control" id="editStudentIdInput" placeholder="รหัสนักศึกษา">
+          <label for="studentIdInput">รหัสนักศึกษา</label>
+        </div>
+        <div class="form-floating">
+          <input type="text" class="form-control" id="editGpaInput" placeholder="gpa">
+          <label for="gpaInput">GPA</label>
+        </div>
+        <div class="form-floating">
+          <input type="text" class="form-control" id="editImageLinkInput" placeholder="image Link">
+          <label for="imageLinkInput">Link รูป</label>
+        </div>
+        <div class="col-auto">
+          <button type="button" class="btn btn-primary" id="editButton">Submit</button>
+        </div>
+      </form>
     </div>
   </div>
   <!-- Optional JavaScript; choose one of the two! -->
